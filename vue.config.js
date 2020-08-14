@@ -18,7 +18,17 @@ module.exports = {
           artifactName: 'Capture-v${version}.${ext}',
           deleteAppDataOnUninstall: true,
           shortcutName: 'Capture'
-        }
+        },
+        extraResources: [
+          {
+            from: 'build/stop_white.png',
+            to: 'stop_white.png'
+          },
+          {
+            from: 'build/stop_black.png',
+            to: 'stop_black.png'
+          }
+        ]
       }
     }
   }

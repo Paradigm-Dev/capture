@@ -71,7 +71,7 @@
 <script>
 import { desktopCapturer, remote } from 'electron'
 import { writeFile } from 'fs'
-const { dialog, Tray } = remote
+const { dialog, Tray, nativeTheme } = remote
 import moment from 'moment'
 import { join } from 'path'
 
@@ -90,7 +90,8 @@ export default {
       console,
       recording: false,
       filepath: '',
-      tray: null
+      tray: null,
+      remote
 		}
 	},
   methods: {
@@ -153,7 +154,12 @@ export default {
       this.mediaRecorder.start()
       this.recording = true
       this.win.hide()
-      this.tray = new Tray(join('/Users/aidanliddy/Dev/capture/src/assets/stop.png'))
+      let appPath = remote.app.getAppPath()
+      if (remote.app.getAppPath().includes('app.asar')) {
+        const index = appPath.indexOf('/app.asar')
+        appPath = appPath.slice(0, index)
+      }
+      this.tray = new Tray(join(appPath, nativeTheme.shouldUseDarkColors ? 'stop_white.png' : 'stop_black.png'))
       this.tray.on('click', () => this.stop())
       this._refreshHeight()
     },

@@ -22,11 +22,8 @@ function createWindow() {
     height: 500,
     frame: false,
     backgroundColor: '#0f0f0f',
-    // icon: './build/icon.png',
     webPreferences: {
-      // Use pluginOptions.nodeIntegration, leave this alone
-      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
-      // nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
+      enableRemoteModule: true,
       nodeIntegration: true
     }
   })
