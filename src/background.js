@@ -4,6 +4,7 @@ import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
+import { autoUpdater } from 'electron-updater'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -18,8 +19,9 @@ function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 600,
-    height: 600,
+    height: 500,
     frame: false,
+    backgroundColor: '#0f0f0f',
     // icon: './build/icon.png',
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -74,6 +76,7 @@ app.on('ready', async () => {
     }
   }
   createWindow()
+  autoUpdater.checkForUpdatesAndNotify()
 })
 
 // Exit cleanly on request from parent process in development mode.

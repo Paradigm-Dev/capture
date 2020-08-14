@@ -23,8 +23,8 @@
       <div style="height: 12px; width: 12px; border-radius: 12px;" v-ripple @click="maximized ? unmaximize() : maximize()" class="green mx-1"></div>
       <v-fade-transition group leave-absolute style="margin: 4px 4px 0px 10px;">
         <div key="logo" v-if="!$root.notify.is" style="display: inline-flex !important;">
-          <img src="./assets/logo.png" height="18" style="margin-right: 4px;">
-          <span style="margin-right: 4px">Capture</span>
+          <img src="./assets/logo.png" height="24" style="margin-right: 4px; margin-top: 1px;">
+          <span style="margin-right: 4px; margin-top: 3px;">Capture</span>
           <!-- <span class="font-weight-light grey--text lighten-2 mr-2 hidden-xs-only">early-access beta</span> -->
         </div>
         <span key="notification" v-if="$root.notify.is">{{ $root.notify.text }}</span>
@@ -33,20 +33,20 @@
 
 		<v-main>
       <v-toolbar color="primary" dense ref="toolbar">
-        <v-menu offset-y>
+        <v-menu offset-y style="background-color: rgb(23, 23, 23);">
           <template v-slot:activator="{ on }">
             <v-btn :disabled="recording" @click="refreshSources()" v-on="on" :loading="sourcesLoading" text><v-icon class="mr-3" left>mdi-monitor-screenshot</v-icon>Source</v-btn>
           </template>
-          <v-list dense>
-            <v-list-item-group v-model="selectedSource">
-              <v-list-item v-for="(source, index) in sources" :key="index" :value="source" @click="selectSource(source)">
+          <v-list dense :style="{ 'max-height': `${win.getSize()[1] - 90}px` }" style="background-color: rgb(23, 23, 23);">
+            <v-list-item-group v-model="selectedSource" style="background-color: rgb(23, 23, 23);">
+              <v-list-item style="background-color: rgb(23, 23, 23);" v-for="(source, index) in sources" :key="index" :value="source" @click="selectSource(source)">
                 <v-list-item-title>{{ source.name }}</v-list-item-title>
               </v-list-item>
             </v-list-item-group>
           </v-list>
         </v-menu>
 
-        <h6 class="text-h6 text-center centralize" v-if="selectedSource">{{ selectedSource.name }}</h6>
+        <h6 class="text-h6 font-weight-light text-center centralize" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: calc(100vw - 260px);" v-if="selectedSource">{{ selectedSource.name }}</h6>
         <v-spacer></v-spacer>
 
         <v-btn disabled v-if="!mediaRecorder && !selectedSource"><v-icon left>mdi-record</v-icon>Start</v-btn>
@@ -62,7 +62,7 @@
 
       <div v-if="!selectedSource" class="text-center my-12">
         <h4 class="text-h4">Select a source to get started</h4>
-        <p class="grey--text">Click the "Source" button in the toolbar above.</p>
+        <p class="grey--text mt-2">Click the "Source" button in the toolbar above.</p>
       </div>
 		</v-main>
   </v-app>
@@ -110,10 +110,13 @@ export default {
     },
     async refreshSources() {
       this.sourcesLoading = true
-      this.sources = []
 
-      this.sources = await desktopCapturer.getSources({
+      let allSources = await desktopCapturer.getSources({
         types: ['window', 'screen']
+      })
+
+      this.sources = allSources.filter(source => {
+        return source.name != 'Capture'
       })
 
       this.sourcesLoading = false
@@ -144,46 +147,61 @@ export default {
       this.mediaRecorder.ondataavailable = this._handleDataAvailable
       this.mediaRecorder.onstop = this._handleStop
 
-      this.win.setSize(600, 161 + videoElement.getBoundingClientRect().height, true)
+      this._refreshHeight()
     },
     start() {
       this.mediaRecorder.start()
       this.recording = true
       this.win.hide()
-      this.tray = new Tray(join('/Users/aidanliddy/Dev/capture-new/src/assets/logo.png'))
+      this.tray = new Tray(join('/Users/aidanliddy/Dev/capture/src/assets/stop.png'))
       this.tray.on('click', () => this.stop())
+      this._refreshHeight()
     },
     stop() {
+      this._refreshHeight()
       this.win.show()
       this.mediaRecorder.stop()
       this.recording = false
       this.tray.destroy()
+      this.win.setSize(600, 400, true)
+    },
+    _refreshHeight() {
+      let videoElement = document.querySelector('video')
+
+      videoElement.addEventListener('loadedmetadata', event => {
+        const divide = videoElement.videoWidth / 600
+        const newThing = videoElement.videoHeight / divide
+        this.win.setSize(600, parseInt(86 + newThing), true)
+      }, false)
     },
     _handleDataAvailable(e) {
       this.recordedChunks.push(e.data)
     },
     async _handleStop() {
+      this._refreshHeight()
+
       const blob = new Blob(this.recordedChunks, {
         type: 'video/webm'
       })
 
       const buffer = Buffer.from(await blob.arrayBuffer())
-
-      const { filePath } = await dialog.showSaveDialog({
-        buttonLabel: 'Save',
-        defaultPath: `${this.selectedSource.name}-${moment().format('dddd, MMMM Do YYYY, h:mm:ss a')}.webm`
-      })
-
-      if (filePath) {
-        await writeFile(filePath, buffer, () => {})
-      }
+      const name = this.selectedSource.name
 
       let videoElement = document.querySelector('video')
       videoElement.srcObject = null
-      this.mediaRecorder = null
       this.recording = false
-      this.selectedSource = null
+      this.mediaRecorder = null
       this.recordedChunks = []
+      this.selectedSource = null
+
+      const { filePath } = await dialog.showSaveDialog({
+        buttonLabel: 'Save',
+        defaultPath: `${name} - ${moment().format('dddd, MMMM Do YYYY, h:mm:ss a')}.webm`
+      })
+      
+      if (filePath) {
+        await writeFile(filePath, buffer, () => {})
+      }
     }
   }
 }
