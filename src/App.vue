@@ -1,10 +1,10 @@
 <template>
   <v-app>
-    <v-system-bar v-if="process.platform != 'darwin'" app window style="-webkit-app-region: drag; -webkit-user-select: none;" color="primary">
+    <v-system-bar v-if="process.platform != 'darwin'" app window style="-webkit-app-region: drag; -webkit-user-select: none;" color="primary" class="pr-0">
       <v-fade-transition group leave-absolute>
         <div key="logo" v-if="!$root.notify.is" style="display: inline-flex !important;">
-          <img src="./assets/logo.png" height="18" style="margin-right: 4px;">
-          <span style="margin-right: 4px">Capture</span>
+          <img src="./assets/logo.png" height="18" style="margin-right: 4px; margin-top: 3px;">
+          <span style="margin-top: 2px;">Capture</span>
           <!-- <span class="font-weight-light grey--text lighten-2 mr-2 hidden-xs-only">early-access beta</span> -->
         </div>
         <span key="notification" v-if="$root.notify.is">{{ $root.notify.text }}</span>
