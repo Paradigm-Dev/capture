@@ -91,8 +91,7 @@ export default {
       recording: false,
       filepath: '',
       tray: null,
-      remote,
-      __dirname
+      remote
 		}
 	},
   methods: {
@@ -160,7 +159,8 @@ export default {
         const index = appPath.indexOf('/app.asar')
         appPath = appPath.slice(0, index)
       }
-      this.tray = new Tray(join(appPath, nativeTheme.shouldUseDarkColors ? 'stop_white.png' : 'stop_black.png'))
+      // if (typeof nativeTheme.shouldUseDarkColors == 'boolean') this.tray = new Tray(join(appPath, nativeTheme.shouldUseDarkColors ? 'stop_white.png' : 'stop_black.png'))
+      else this.tray = new Tray(join(appPath, 'stop_white.png'))
       this.tray.on('click', () => this.stop())
       this._refreshHeight()
     },

@@ -17,7 +17,8 @@ module.exports = {
         nsis: {
           artifactName: 'Capture-v${version}.${ext}',
           deleteAppDataOnUninstall: true,
-          shortcutName: 'Capture'
+          shortcutName: 'Capture',
+          uninstallDisplayName: 'Capture'
         },
         extraResources: [
           {
