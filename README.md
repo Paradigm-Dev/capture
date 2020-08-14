@@ -12,13 +12,13 @@ We use [NPM](https://npmjs.org/) (Node Package Manager) for any external librari
 ### Todo
 - [x] Source selection
 - [x] Menu bar stop button (macOS)
-- [ ] System tray stop button (Windows)
-- [ ] Change color of menu bar/system tray button based upon system theme
+- [x] System tray stop button (Windows)
+- [x] Change color of menu bar/system tray button based upon system theme
 - [ ] Record audio
 - [ ] Record webcam
 - [ ] Select where webcam input will be placed
 - [ ] Save files as .mp4
-- [ ] Automatic updates
+- [ ] Improve automatic updates
 
 ### Package installation
 Run this command to install all dependencies.
