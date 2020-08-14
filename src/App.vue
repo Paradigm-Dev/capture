@@ -91,7 +91,8 @@ export default {
       recording: false,
       filepath: '',
       tray: null,
-      remote
+      remote,
+      __dirname
 		}
 	},
   methods: {
@@ -153,7 +154,7 @@ export default {
     start() {
       this.mediaRecorder.start()
       this.recording = true
-      this.win.hide()
+      this.win.minimize()
       let appPath = remote.app.getAppPath()
       if (remote.app.getAppPath().includes('app.asar')) {
         const index = appPath.indexOf('/app.asar')
@@ -165,7 +166,7 @@ export default {
     },
     stop() {
       this._refreshHeight()
-      this.win.show()
+      this.win.restore()
       this.mediaRecorder.stop()
       this.recording = false
       this.tray.destroy()
