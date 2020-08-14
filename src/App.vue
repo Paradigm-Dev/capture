@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <v-system-bar v-if="process.platform != 'darwin'" app window style="-webkit-app-region: drag; -webkit-user-select: none;" color="primary" class="pr-0">
+    <v-system-bar v-if="process.platform != 'darwin'" app window style="-webkit-app-region: drag; -webkit-user-select: none;" height="38" color="primary" class="pr-0">
       <v-fade-transition group leave-absolute>
-        <div key="logo" v-if="!$root.notify.is" style="display: inline-flex !important;">
+        <div key="logo" v-if="!$root.notify.is" style="display: inline-flex !important; margin-left: 2px;">
           <img src="./assets/logo.png" height="18" style="margin-right: 4px; margin-top: 3px;">
           <span style="margin-top: 2px;">Capture</span>
           <!-- <span class="font-weight-light grey--text lighten-2 mr-2 hidden-xs-only">early-access beta</span> -->
@@ -63,6 +63,7 @@
       <div v-if="!selectedSource" class="text-center my-12">
         <h4 class="text-h4">Select a source to get started</h4>
         <p class="grey--text mt-2">Click the "Source" button in the toolbar above.</p>
+        {{ remote.app.getAppPath() }}
       </div>
 		</v-main>
   </v-app>
@@ -155,12 +156,9 @@ export default {
       this.recording = true
       this.win.minimize()
       let appPath = remote.app.getAppPath()
-      if (remote.app.getAppPath().includes('app.asar')) {
-        const index = appPath.indexOf('/app.asar')
-        appPath = appPath.slice(0, index)
-      }
+      if (remote.app.getAppPath().includes('app.asar')) appPath = appPath.replace('app.asar', '')
       // if (typeof nativeTheme.shouldUseDarkColors == 'boolean') this.tray = new Tray(join(appPath, nativeTheme.shouldUseDarkColors ? 'stop_white.png' : 'stop_black.png'))
-      else this.tray = new Tray(join(appPath, 'stop_white.png'))
+      this.tray = new Tray(join(appPath, 'stop_white.png'))
       this.tray.on('click', () => this.stop())
       this._refreshHeight()
     },
