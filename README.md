@@ -7,7 +7,17 @@
 
 Proudly built with [Vue.js](https://vuejs.org/), [Vuetify](https://vuetifyjs.com), and [Electron](https://www.electronjs.org).
 
-We use [NPM](https://npmjs.org/) (Node Package Manager) for our external libraries.
+We use [NPM](https://npmjs.org/) (Node Package Manager) for any external libraries used.
+
+### Todo
+- [x] Source selection
+- [x] Menu bar stop button (macOS)
+- [ ] System tray stop button (Windows)
+- [ ] Record audio
+- [ ] Record webcam
+- [ ] Select where webcam input will be placed
+- [ ] Save files as .mp4
+- [ ] Automatic updates
 
 ### Package installation
 Run this command to install all dependencies.
