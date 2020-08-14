@@ -2,8 +2,16 @@
   "name": "capture",
   "version": "0.0.1",
   "private": true,
+  "author": {
+    "name": "Paradigm",
+    "email": "paradigmdevelop@gmail.com"
+  },
+  "homepage": "https://www.theparadigmdev.com",
+  "description": "A lightweight and user-friendly screen capturing tool.",
+  "repository": "github:Paradigm-Dev/capture",
   "scripts": {
-    "build": "vue-cli-service electron:build",
+    "release": "vue-cli-service electron:build --publish always --mac",
+    "build": "vue-cli-service electron:build -mw",
     "serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
@@ -11,6 +19,7 @@
   "main": "background.js",
   "dependencies": {
     "core-js": "^3.6.5",
+    "electron-updater": "^4.3.4",
     "moment": "^2.27.0",
     "vue": "^2.6.11",
     "vuetify": "^2.2.11"

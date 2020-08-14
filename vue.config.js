@@ -6,11 +6,20 @@ module.exports = {
     electronBuilder: {
       outputDir: 'output',
       removeElectronJunk: false,
-      shortcutName: 'Capture',
+      nodeIntegration: true,
       icon: 'build/icon.png',
-      productName: 'AppName',
-      name: 'Capture',
-      nodeIntegration: true
+      builderOptions: {
+        productName: 'Capture',
+        dmg: {
+          artifactName: 'Capture-v${version}.${ext}',
+          title: 'Capture'
+        },
+        nsis: {
+          artifactName: 'Capture-v${version}.${ext}',
+          deleteAppDataOnUninstall: true,
+          shortcutName: 'Capture'
+        }
+      }
     }
   }
 }

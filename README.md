@@ -13,6 +13,7 @@ We use [NPM](https://npmjs.org/) (Node Package Manager) for any external librari
 - [x] Source selection
 - [x] Menu bar stop button (macOS)
 - [ ] System tray stop button (Windows)
+- [ ] Change color of menu bar/system tray button based upon system theme
 - [ ] Record audio
 - [ ] Record webcam
 - [ ] Select where webcam input will be placed
