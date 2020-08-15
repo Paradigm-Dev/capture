@@ -12,7 +12,7 @@
     "build": "vue-cli-service electron:build -mw",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "release": "vue-cli-service electron:build --publish always --mac"
+    "release": "vue-cli-service electron:build --publish always -mw"
   },
   "main": "background.js",
   "dependencies": {

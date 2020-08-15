@@ -9,6 +9,9 @@ Proudly built with [Vue.js](https://vuejs.org/), [Vuetify](https://vuetifyjs.com
 
 We use [NPM](https://npmjs.org/) (Node Package Manager) for any external libraries used.
 
+### Guide
+Once the application opens, you must select an input source. Click the "Source" button in the top left of the app. A dropdown will appear with a list of available sources. Select the one you want. Once selected, a preview will appear below the toolbar. In the top right, two options will be enabled, Screenshot and Record. Screenshot takes a picture of the selected source. Capture will disappear until the image is either saved or deleted. Record will record the selected source. Capture will minimize while recording. To stop recording, either click the stop icon in the System Tray (Windows) or Menu Bar (macOS) or restore Capture and click the stop button. On both modes, a save dialog box will appear in which you can choose the name and location to store the screenshots and recordings. Screenshots output a JPG file and Record outputs a WEBM file (for now, we want to change it to an MP4).
+
 ### Todo
 - [x] Source selection
 - [x] Menu bar stop button (macOS)
