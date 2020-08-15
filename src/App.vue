@@ -10,7 +10,7 @@
         <span key="notification" v-if="$root.notify.is">{{ $root.notify.text }}</span>
       </v-fade-transition>
       <v-spacer></v-spacer>
-      <div style="-webkit-app-region: no-drag;">
+      <div style="-webkit-app-region: no-drag; margin-bottom: 1px;">
         <v-icon @click="minimize()" v-ripple class="toolbar-icon">mdi-minus</v-icon>
         <v-icon @click="maximized ? unmaximize() : maximize()" v-ripple class="toolbar-icon">mdi-crop-square</v-icon>
         <v-icon @click="close()" v-ripple class="toolbar-icon">mdi-close</v-icon>
@@ -46,7 +46,7 @@
           </v-list>
         </v-menu>
 
-        <h6 class="text-h6 font-weight-light text-center centralize" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: calc(100vw - 260px);" v-if="selectedSource">{{ selectedSource.name }}</h6>
+        <h6 class="text-h6 font-weight-light text-center centralize" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: calc(100vw - 356px);" v-if="selectedSource">{{ selectedSource.name }}</h6>
         <v-spacer></v-spacer>
 
         <v-btn disabled v-if="!mediaRecorder && !selectedSource" icon><v-icon>mdi-image-filter-center-focus</v-icon></v-btn>
