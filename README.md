@@ -17,6 +17,7 @@ Once the application opens, you must select an input source. Click the "Source" 
 - [x] Menu bar stop button (macOS)
 - [x] System tray stop button (Windows)
 - [x] Change color of menu bar/system tray button based upon system theme
+- [x] Screenshot
 - [ ] Record audio
 - [ ] Record webcam
 - [ ] Select where webcam input will be placed
