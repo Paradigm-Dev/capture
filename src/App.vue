@@ -49,10 +49,10 @@
         <h6 class="text-h6 font-weight-light text-center centralize" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: calc(100vw - 260px);" v-if="selectedSource">{{ selectedSource.name }}</h6>
         <v-spacer></v-spacer>
 
-        <v-btn disabled v-if="!mediaRecorder && !selectedSource"><v-icon left>mdi-record</v-icon>Start</v-btn>
-        <v-btn @click="start()" v-if="mediaRecorder && recording === false" color="secondary"><v-icon left>mdi-record</v-icon>Start</v-btn>
-        <!-- <v-btn @click="mediaRecorder.pause(); paused = true" v-if="mediaRecorder && recording === true && paused == false" color="red" icon><v-icon>mdi-pause</v-icon></v-btn>
-        <v-btn @click="mediaRecorder.resume(); paused = false" v-if="mediaRecorder && recording === true && paused == true" color="red" icon><v-icon>mdi-play</v-icon></v-btn> -->
+        <v-btn disabled v-if="!mediaRecorder && !selectedSource" icon><v-icon>mdi-image-filter-center-focus</v-icon></v-btn>
+        <v-btn disabled v-if="!mediaRecorder && !selectedSource"><v-icon left>mdi-record</v-icon>Record</v-btn>
+        <v-btn @click="screenshot()" v-if="mediaRecorder && recording === false" color="secondary" icon><v-icon>mdi-image-filter-center-focus</v-icon></v-btn>
+        <v-btn @click="start()" v-if="mediaRecorder && recording === false" color="secondary"><v-icon left>mdi-record</v-icon>Record</v-btn>
         <v-btn @click="stop()" v-if="mediaRecorder && recording === true" color="red"><v-icon left>mdi-stop</v-icon>Stop</v-btn>
       </v-toolbar>
 
@@ -63,7 +63,6 @@
       <div v-if="!selectedSource" class="text-center my-12">
         <h4 class="text-h4">Select a source to get started</h4>
         <p class="grey--text mt-2">Click the "Source" button in the toolbar above.</p>
-        {{ remote.app.getAppPath() }}
       </div>
 		</v-main>
   </v-app>
@@ -72,7 +71,7 @@
 <script>
 import { desktopCapturer, remote } from 'electron'
 import { writeFile } from 'fs'
-const { dialog, Tray, nativeTheme } = remote
+const { dialog, Tray, nativeTheme, screen } = remote
 import moment from 'moment'
 import { join } from 'path'
 
@@ -91,8 +90,7 @@ export default {
       console,
       recording: false,
       filepath: '',
-      tray: null,
-      remote
+      tray: null
 		}
 	},
   methods: {
@@ -157,8 +155,8 @@ export default {
       this.win.minimize()
       let appPath = remote.app.getAppPath()
       if (remote.app.getAppPath().includes('app.asar')) appPath = appPath.replace('app.asar', '')
-      // if (typeof nativeTheme.shouldUseDarkColors == 'boolean') this.tray = new Tray(join(appPath, nativeTheme.shouldUseDarkColors ? 'stop_white.png' : 'stop_black.png'))
-      this.tray = new Tray(join(appPath, 'stop_white.png'))
+      if (typeof nativeTheme.shouldUseDarkColors == 'boolean') this.tray = new Tray(join(appPath, nativeTheme.shouldUseDarkColors ? 'stop_white.png' : 'stop_black.png'))
+      else this.tray = new Tray(join(appPath, 'stop_white.png'))
       this.tray.on('click', () => this.stop())
       this._refreshHeight()
     },
@@ -169,6 +167,33 @@ export default {
       this.recording = false
       this.tray.destroy()
       this.win.setSize(600, 400, true)
+    },
+    async screenshot() {
+      this.win.hide()
+
+      let allSources = await desktopCapturer.getSources({
+        types: ['window', 'screen'],
+        thumbnailSize: {
+          width: screen.getPrimaryDisplay().size.width / 1.25,
+          height: screen.getPrimaryDisplay().size.height / 1.25,
+        }
+      })
+
+      let sources = allSources.filter(source => {
+        return source.name == this.selectedSource.name
+      })
+      this.selectedSource = sources[0]
+
+      const { filePath } = await dialog.showSaveDialog({
+        buttonLabel: 'Save',
+        defaultPath: `${this.selectedSource.name} - ${moment().format('dddd, MMMM Do YYYY, h:mm:ss a')}.png`
+      })
+      
+      if (filePath) {
+        await writeFile(filePath, this.selectedSource.thumbnail.toPNG(), () => {})
+      }
+
+      this.win.show()
     },
     _refreshHeight() {
       let videoElement = document.querySelector('video')
